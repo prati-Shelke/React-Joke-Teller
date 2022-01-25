@@ -1,7 +1,7 @@
 import React from "react";
 import {Formik} from 'formik';
 
-class Form extends React.Component
+class Demo extends React.Component
 {
 
     
@@ -14,17 +14,18 @@ class Form extends React.Component
                 { (formik) =>
                     (
                         <form className="container" style={{marginTop:"100px"}}>
-                            <div className="border border-white rounded">
-                                <table >
-                                    <tbody>
-                                        <div style={{marginTop:"30px"}}>
-                                            <tr >
+                            <div className="border border-white rounded" style={{backgroundColor:"#1d252e"}}>
+                                <table style={{marginLeft:"30px",marginTop:"30px"}}>
+                                    <tbody >
+                                        
+                                        <tr>
+                                            
                                                 <td>
                                                     <label className="label"> Select category / categories : </label>
                                                 </td>
 
                                                 <td>
-                                                    <div className="border border-white rounded">
+                                                    <div className="border border-white rounded" style={{marginLeft:"100px",backgroundColor:"#19191a"}}>
                                                         <input type="radio"/> <label className="label"> Any </label>
 
                                                         <div>
@@ -38,8 +39,8 @@ class Form extends React.Component
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>
-                                        </div>
+                                        </tr>
+                                        
 
                                         <tr>
                                             <td>
@@ -72,4 +73,4 @@ class Form extends React.Component
     }
 }
 
-export default Form
+export default Demo
