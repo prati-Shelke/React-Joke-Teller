@@ -4,7 +4,7 @@ import {Button} from 'react-bootstrap'
 import api from './api'
 import axios from 'axios'
 
-class Form extends React.Component
+class JokeForm extends React.Component
 {
 
     constructor() 
@@ -45,42 +45,42 @@ class Form extends React.Component
         let error = {}
         if (values.Category === '' || values.Category.length === 0)
         {
-            document.getElementById('CategoryValidation').className ="card border border-danger rounded sub-field1"
+            document.getElementById('CategoryValidation').className ="col-6 mt-4 border border-danger rounded"
             error = {category:true}
         }
         else
         {
-            document.getElementById('CategoryValidation').className ="card border border-white rounded sub-field1"
+            document.getElementById('CategoryValidation').className ="col-6 mt-4 border rounded"
         }
         
         if(values.Type.length === 0)
         {
-            document.getElementById('TypeValidation').className ="card border border-danger rounded sub-field4"
+            document.getElementById('TypeValidation').className ="col-6 border border-danger rounded"
             error = {type:true}
         }
         else
         {
-            document.getElementById('TypeValidation').className ="card border border-white rounded sub-field4"
+            document.getElementById('TypeValidation').className ="col-6 border rounded"
         }
 
         if(values.From === '' || values.To === '' || values.From < 0)
         {
-            document.getElementById('searchID').className ="card border border-danger rounded sub-field6"
+            document.getElementById('searchID').className ="col-6 border border-danger rounded"
             error = {range:true} 
         }
         else
         {
-            document.getElementById('searchID').className ="card border border-white rounded sub-field6"
+            document.getElementById('searchID').className ="col-6 border rounded"
         }
 
-        if(values.Amount === '')
+        if(values.Amount === '' || values.Amount === 0)
         {
-            document.getElementById('AmountValidation').className ="card border border-danger rounded sub-field7" 
+            document.getElementById('AmountValidation').className ="col-6 border border-danger rounded" 
             error = {Amount:true} 
         }
         else
         {
-            document.getElementById('AmountValidation').className ="card border border-white rounded sub-field7"
+            document.getElementById('AmountValidation').className ="col-6 border rounded"
         }
         return error
     }
@@ -140,22 +140,25 @@ class Form extends React.Component
             temp = '&'
         }
 
-        console.log(this.state.url)
+        // console.log(this.state.url)
         this.setState({isSubmited : true})
         let response = await axios.get(this.state.url)
         this.setState({jokeData : response.data})  
 
-        let data = response.data.jokes && response.data.jokes.map(joke =>
-            {
-                return{
-                   ...joke,
-                   isShowAnswer : false
+        if(values.Amount!== 1)
+        {
+            let data = response.data.jokes && response.data.jokes.map(joke =>
+                {
+                    
+                    return{
+                    ...joke,
+                    isShowAnswer : false
+                    }
                 }
-            }
-        )
-        console.log(data)
-        this.setState(prevState => {prevState.jokes = data})
-           
+            )
+            // console.log(data)
+            this.setState({jokeData : {error:response.data.error , amount : response.data.amount , jokes : data}})
+        }
         this.setState({isShowAnswer:false})
 
         // let temp = {
@@ -192,15 +195,16 @@ class Form extends React.Component
                     (
                         <>
                             <div className="container" style={{marginTop:"110px"}}>
-                                {console.log(this.state.jokeData)}
+                                {console.log(formik)}
                                 <form onSubmit={formik.handleSubmit}>
 
-                                    <div className="card border border-white rounded" style={{backgroundColor:"#1d252e"}}>
+                                    <div className="card p-3 border rounded" style={{backgroundColor:"#1d252e"}}>
 
-                                            <div className="field d-flex">
-                                                <label className="label" style={{paddingTop:"20px"}}> Select category / categories : </label>
-
-                                                <div id="CategoryValidation" className="card border border-white rounded sub-field1" style={{backgroundColor:"#19191a"}}>
+                                            <div className="row mb-4">
+                                                <div className="col-3 mt-5 text-start">
+                                                    <label className="label" > Select category / categories : </label>
+                                                </div>
+                                                <div id="CategoryValidation" className="col-6 mt-4 border rounded" style={{backgroundColor:"#19191a"}}>
                                                     <div style={{margin:"10px"}}>
                                                         <input type="radio" name="Category" value="Any" onChange={formik.handleChange} checked={formik.values.Category === 'Any'} onClick={()=>this.setState({isChecked:false})}/> <label className="label"> Any </label>
 
@@ -209,7 +213,7 @@ class Form extends React.Component
                                                             { this.state.isChecked 
                                                                 ?
                                                                     <>
-                                                                        <input type="checkbox" name="Category" onChange={formik.handleChange} value="Programming" /> <label className="label"> Pragramming </label>
+                                                                        <input className='pr-4'  type="checkbox" name="Category" onChange={formik.handleChange} value="Programming" /> <label className="label"> Pragramming </label>
                                                                         <input type="checkbox" name="Category" onChange={formik.handleChange} value="Miscellaneous"/> <label className="label"> Misc </label>
                                                                         <input type="checkbox" name="Category" onChange={formik.handleChange} value="Dark"/> <label className="label"> Dark </label>
                                                                         <input type="checkbox" name="Category" onChange={formik.handleChange} value="Pun"/> <label className="label"> Pun </label>
@@ -218,7 +222,7 @@ class Form extends React.Component
                                                                     </>  
                                                                 :
                                                                     <>
-                                                                        <input style={{cursor:"not-allowed"}} type="checkbox" name="Category" onChange={formik.handleChange} value="Programming" disabled/> <label className="labeld"> Pragramming </label>
+                                                                        <input className='pr-4' style={{cursor:"not-allowed"}} type="checkbox" name="Category" onChange={formik.handleChange} value="Programming" disabled/> <label className="labeld"> Pragramming </label>
                                                                         <input type="checkbox" name="Category" onChange={formik.handleChange} value="Miscellaneous" disabled/> <label className="labeld"> Misc </label>
                                                                         <input type="checkbox" name="Category" onChange={formik.handleChange} value="Dark" disabled/> <label className="labeld"> Dark </label>
                                                                         <input type="checkbox" name="Category" onChange={formik.handleChange} value="Pun" disabled/> <label className="labeld"> Pun </label>
@@ -231,10 +235,12 @@ class Form extends React.Component
                                                 </div>
                                             </div>
 
-                                            <div className="field d-flex" >
-                                                <label className="label" style={{paddingTop:"10px"}}> Select language : </label>
+                                            <div className="row mb-4">
+                                                <div className="col-3">
+                                                    <label className="label" style={{paddingTop:"10px"}}> Select language : </label>
+                                                </div>
 
-                                                <div className="card border border-white rounded sub-field2" style={{backgroundColor:"#19191a"}}>
+                                                <div className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
                                                     <select value={formik.values.Language} name="Language" onClick={()=>{this.state.idRange[formik.values.Language] && (formik.values.To = this.state.idRange[formik.values.Language][1]);(formik.values.From = this.state.idRange[formik.values.Language][0])}} onChange={formik.handleChange} style={{margin:"10px",width:"20%"}}>
                                                         <option value="cs"> cs-Czech </option>
                                                         <option value="de"> de-German </option>
@@ -247,10 +253,12 @@ class Form extends React.Component
 
                                             </div>
 
-                                            <div className="field d-flex">
-                                                <label className="label" style={{paddingTop:"10px"}}> Select flags to blacklist : </label>
-                                                    
-                                                <div className="card border border-white rounded sub-field3" style={{backgroundColor:"#19191a"}}>
+                                            <div className="row mb-4">
+                                                <div className="col-3 ">
+                                                    <label className="label" style={{paddingTop:"10px"}}> Select flags to blacklist : </label>
+                                                </div>
+
+                                                <div className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
                                                     <div style={{margin:"10px"}}>
                                                         <label className="label"> (optional) </label> 
                                                         <input type="checkbox" name="Flags" onChange={formik.handleChange} value="nsfw"/> <label className="label"> nsfw </label>
@@ -263,10 +271,13 @@ class Form extends React.Component
                                                 </div>
                                             </div>
 
-                                            <div className="field d-flex">
-                                                <label className="label" style={{paddingTop:"10px"}}> Select at least one joke type :  </label>
+                                            <div className="row mb-4">
+                                                <div className="col-3">
+                                                    <label className="label" style={{paddingTop:"10px"}}> Select at least one joke type :  </label>
+                                                </div>
                                                 
-                                                <div id="TypeValidation" className="card border border-white rounded sub-field4" style={{backgroundColor:"#19191a"}}>
+                                                
+                                                <div id="TypeValidation" className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
                                                     <div style={{margin:"10px"}}>
                                                         <input type="checkbox" name="Type" value="single" onChange={formik.handleChange} defaultChecked={formik.values.Type.map(val=> val==="single")}/> <label className="label"> single </label>
                                                         <input type="checkbox" name="Type" value="twopart" onChange={formik.handleChange} defaultChecked={formik.values.Type.map(val=> val=="twopart" ? true : false)}/> <label className="label"> twopart </label>
@@ -274,20 +285,24 @@ class Form extends React.Component
                                                 </div>
                                             </div>
 
-                                            <div className="field d-flex">
-                                                <label className="label" > Search for a joke that <br/>
-                                                                            contains this search string :  </label>
+                                            <div className="row mb-4">
+
+                                                <div className="col-3">
+                                                    <label className="label" > Search for a joke that contains this search string :  </label>
+                                                </div>
+                                               
                                                 
-                                                <div className="card border border-white rounded sub-field5" style={{backgroundColor:"#19191a"}}>
+                                                <div className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
                                                     <input type="text" name="SearchString" value={formik.values.SearchString} onChange={formik.handleChange} placeholder="optional" style={{margin:"8px"}}/> 
                                                 </div>
                                             </div>
 
-                                            <div className="field d-flex">
-                                                <label className="label"> Search for a joke <br/>
-                                                                            in this ID range :  </label>
-                                                        
-                                                <div id="searchID" className="card border border-white rounded sub-field6" style={{backgroundColor:"#19191a"}}>
+                                            <div className="row mb-4">
+                                                <div className="col-3">
+                                                    <label className="label"> Search for a joke in this ID range :  </label>
+                                                </div>
+                                                     
+                                                <div id="searchID" className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
                                                     <div style={{margin:"8px"}}>
                                                         <label className="label"> (optional) </label>
                                                         <label className="label"> From : </label>:
@@ -305,10 +320,13 @@ class Form extends React.Component
                                                 </div>
                                             </div>
 
-                                            <div className="field d-flex" style={{marginBottom:"40px"}}>
-                                                <label className="label" style={{paddingTop:"10px"}}> Amout of jokes : </label>
-                                                <div id="AmountValidation" className="card border border-white rounded sub-field7" style={{backgroundColor:"#19191a"}}>
-                                                    <input type="number" name="Amount" style={{margin:"8px",width:"10%"}} value={formik.values.Amount} onChange={formik.handleChange}/> 
+                                            <div className="row mb-4" style={{marginBottom:"40px"}}>
+                                                <div className="col-3">
+                                                    <label className="label" style={{paddingTop:"10px"}}> Amout of jokes : </label>
+                                                </div>
+                                                
+                                                <div id="AmountValidation" className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
+                                                    <input type="number" name="Amount" style={{margin:"8px",width:"10%"}} min="1" value={formik.values.Amount} onChange={formik.handleChange}/> 
                                                 </div>
                                             </div>
                                     </div>  
@@ -319,62 +337,75 @@ class Form extends React.Component
                                 </form>
                             </div>
 
-                            {(this.state.isSubmited) &&
-                                
+                            <div className="container card border border-white rounded" style={{backgroundColor:"#1d252e",marginBottom:"200px"}}>
+                    
+                                <h5 className="mt-3" style={{color:"white"}}>{`</>`}Result</h5>
+                                <hr style={{height:"5px",color:"#8307f8"}}></hr>
+                            
+                                {(this.state.isSubmited) &&
                                 <>
                                         { (formik.isValid === true && this.state.jokeData.error!==true)
                                             ?
-                                                <div className="container card border border-white rounded" style={{backgroundColor:"#1d252e",marginBottom:"200px"}}>
+                                                <>
                                                     {(formik.values.Amount === 1) 
                                                         ?
                                                             <>
                                                             {(this.state.jokeData.type === "twopart")
                                                                 ?
-                                                                    <div style={{color:"white",height:"100px",margin:"60px"}}>
+                                                                    <div style={{color:"white",height:"100px",margin:"30px 20px"}}>
                                                                         <label> {this.state.jokeData.setup} </label><br/>
                                                                         { this.state.isShowAnswer!=true 
                                                                             ?
                                                                                 <button id="btn" type="submit" style={{margin:"15px 0px"}} className="btn btn-danger" onClick={()=>this.setState({isShowAnswer:true})}> show Answer</button>
                                                                             : 
-                                                                                <label id="ans" style={{display:"block"}}> {this.state.jokeData.delivery} </label>
+                                                                                <label id="ans" style={{margin:"15px 0px",display:"block"}}> {this.state.jokeData.delivery} </label>
                                                                         }
+                                                                        
                                                                     </div> 
                                                                 : 
-                                                                    <div style={{color:"white",height:"100px",margin:"60px"}}>
+                                                                    <div style={{color:"white",height:"100px",margin:"30px 20px"}}>
                                                                         <label> {this.state.jokeData.joke} </label><br/>
                                                                     </div>
                                                             }
                                                             </>
                                                         :
                                                             <>
+                                                            
                                                                 { this.state.jokeData.jokes && this.state.jokeData.jokes.map((joke,ind) =>
                                                                     <div key={ind}>
                                                                         {joke.type === "twopart" 
                                                                             ?
-                                                                                <div style={{color:"white",height:"100px",margin:"30px"}}>
+                                                                                <div style={{color:"white",height:"100px",marginTop:"30px"}}>
                                                                                     <label> {joke.setup} </label><br/>
-                                                                                    { this.state.isShowAnswer!=true 
+                                                                                    { this.state.jokeData.jokes[ind].isShowAnswer!=true 
                                                                                         ?
-                                                                                            <button id="btn" type="submit" style={{margin:"15px 0px"}} className="btn btn-danger" onClick={()=>this.setState({isShowAnswer:true})}> show Answer</button>
+                                                                                                <button id="btn" type="submit" style={{margin:"15px 0px"}} className="btn btn-danger" onClick={()=> this.setState({isShowAnswer : this.state.jokeData.jokes[ind].isShowAnswer = true})}> show Answer</button>
                                                                                         : 
                                                                                             <label id="ans" style={{display:"block"}}> {joke.delivery} </label>
                                                                                     }
+                                                                                    {ind!== formik.values.Amount-1 && <><br/><label>--------------------------------------------------------</label></>}
                                                                                 </div>
                                                                             :
                                                                             
                                                                             
-                                                                                <div style={{color:"white",height:"100px",margin:"10px"}}>
+                                                                                <div style={{color:"white",height:"100px",marginTop:"30px"}}>
                                                                                     <label> {joke.joke} </label><br/>
+                                                                                    {ind!== formik.values.Amount-1 && <><br/><label>--------------------------------------------------------</label></>}
                                                                                 </div>
                                                                         }
+                                                                        
+                                                                       
                                                                     </div>)
                                                                 }   
+                                                                
                                                             </>
                                                     }
-                                                </div>
+                                                </>
+                                                
                                             :
                                             (
                                                 <>
+                                                    
                                                     {formik.isValid === true && this.state.jokeData.error ===true
                                                         ?
                                                             <div id="error" style={{color:"white",height:"200px",margin:"60px"}}>
@@ -396,13 +427,15 @@ class Form extends React.Component
                                                                 </label><br/>
                                                             </div>
                                                     }
+                                                    
                                                 </>
                                             
                                             )
                                         }      
                                 </>
                                 
-                            }
+                                }
+                            </div>
                         </>
                        
                     )
@@ -412,6 +445,7 @@ class Form extends React.Component
     }
 }
 
-export default Form
+export default JokeForm
 
 
+ 

@@ -20,9 +20,9 @@ class NavBar extends React.Component
             <Navbar fixed="top" bg="dark" expand={false} style={{height:"50px"}}>
                 { this.state.animate 
                     ? 
-                        <p className="animate__animated animate__heartBeat" style={{color:"red",fontSize:"28px",cursor:"pointer",marginLeft:"650px",marginTop:"-5px"}} onMouseLeave={()=> this.setState({animate:false})}> Joke Teller App </p> 
+                        <p className="animate__animated animate__heartBeat" style={{color:"red",fontSize:"28px",cursor:"pointer",marginLeft:"650px",marginTop:"2px"}} onMouseLeave={()=> this.setState({animate:false})}> Joke Teller App </p> 
                     :
-                        <p  style={{color:"white",fontSize:"28px",marginLeft:"650px",marginTop:"-5px"}} onMouseEnter={()=> this.setState({animate:true})}> Joke Teller App </p>
+                        <p  style={{color:"white",fontSize:"28px",marginLeft:"650px",marginTop:"2px"}} onMouseEnter={()=> this.setState({animate:true})}> Joke Teller App </p>
                 }
             </Navbar>
         )
