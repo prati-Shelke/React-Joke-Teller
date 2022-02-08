@@ -7,7 +7,7 @@ import { render,  screen } from '@testing-library/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-it("renders without crashing", () => {
+it("renders without hii crashing", () => {
     shallow(<JokeForm />);
 });
 
