@@ -205,11 +205,11 @@ class JokeForm extends React.Component
                                                     <label className="label" > Select category / categories : </label>
                                                 </div>
                                                 <div id="CategoryValidation" className="col-6 mt-4 border rounded" style={{backgroundColor:"#19191a"}}>
-                                                    <div style={{margin:"10px"}}>
-                                                        <input type="radio" name="Category" value="Any" onChange={formik.handleChange} checked={formik.values.Category === 'Any'} onClick={()=>this.setState({isChecked:false})}/> <label className="label"> Any </label>
+                                                    <div style={{margin:"10px"}} >
+                                                        <input type="radio" name="Category" value="Any" onChange={formik.handleChange} checked={formik.values.Category === 'Any' && true} onClick={()=>this.setState({isChecked:false})}/> <label className="label"> Any </label>
 
                                                         <div>
-                                                            <input type="radio" name="Category" value="" onChange={formik.handleChange} onClick={()=>this.setState({isChecked:true})} /> <label className="label"> Custom </label>
+                                                            <input type="radio" id="custom" checked={formik.values.Category!=='Any' ? true : false} name="Category" value="" onChange={formik.handleChange} onClick={()=>this.setState({isChecked:true})} /> <label className="label"> Custom </label>
                                                             { this.state.isChecked 
                                                                 ?
                                                                     <>
@@ -279,8 +279,8 @@ class JokeForm extends React.Component
                                                 
                                                 <div id="TypeValidation" className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
                                                     <div style={{margin:"10px"}}>
-                                                        <input type="checkbox" name="Type" value="single" onChange={formik.handleChange} defaultChecked={formik.values.Type.map(val=> val==="single")}/> <label className="label"> single </label>
-                                                        <input type="checkbox" name="Type" value="twopart" onChange={formik.handleChange} defaultChecked={formik.values.Type.map(val=> val=="twopart" ? true : false)}/> <label className="label"> twopart </label>
+                                                        <input type="checkbox" id="single" name="Type" value="single" onChange={formik.handleChange} checked={(formik.values.Type).includes('single') && true}/> <label className="label"> single </label>
+                                                        <input type="checkbox" id="twopart" name="Type" value="twopart" onChange={formik.handleChange} checked={(formik.values.Type).includes('twopart') && true}/> <label className="label"> twopart </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -326,7 +326,7 @@ class JokeForm extends React.Component
                                                 </div>
                                                 
                                                 <div id="AmountValidation" className="col-6 border rounded" style={{backgroundColor:"#19191a"}}>
-                                                    <input type="number" name="Amount" style={{margin:"8px",width:"10%"}} min="1" value={formik.values.Amount} onChange={formik.handleChange}/> 
+                                                    <input type="number" data-testid="amount" name="Amount" style={{margin:"8px",width:"10%"}} min="1" value={formik.values.Amount} onChange={formik.handleChange}/> 
                                                 </div>
                                             </div>
                                     </div>  
